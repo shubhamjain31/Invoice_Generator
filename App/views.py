@@ -1,9 +1,12 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.template.loader import get_template
+from django.http import HttpResponse
 from django.views import View
 
 from .models import LineItem, Invoice
 from App.forms import LineItemFormset, InvoiceForm
+
+import pdfkit
 
 # Create your views here.
 
@@ -95,3 +98,42 @@ def createInvoice(request):
         "form": form,
     }
     return render(request, 'invoice/invoice-create.html', context)
+
+def view_PDF(request, id=None):
+    invoice 	= get_object_or_404(Invoice, id=id)
+    lineitem 	= invoice.lineitem_set.all()
+
+    context = {
+        "company": {
+            "name": 	"Ibrahim Services",
+            "address":	"67542 Jeru, Chatsworth, CA 92145, US",
+            "phone": 	"(818) XXX XXXX",
+            "email": 	"contact@ibrahimservice.com",
+        },
+        "invoice_id": 		invoice.id,
+        "invoice_total": 	invoice.total_amount,
+        "customer": 		invoice.customer,
+        "customer_email": 	invoice.customer_email,
+        "date": 			invoice.date,
+        "due_date": 		invoice.due_date,
+        "billing_address": 	invoice.billing_address,
+        "message": 			invoice.message,
+        "lineitem": 		lineitem,
+
+    }
+
+    return render(request, 'invoice/pdf_template.html', context)
+
+def generate_PDF(request, id):
+    pdf 		= pdfkit.from_url(request.build_absolute_uri(reverse('invoice:invoice-detail', args=[id])), False)
+    response 	= HttpResponse(pdf,content_type='application/pdf')
+    
+    response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+
+    return response
+
+def change_status(request):
+    return redirect('invoice:invoice-list')
+
+def view_404(request,  *args, **kwargs):
+    return redirect('invoice:invoice-list')

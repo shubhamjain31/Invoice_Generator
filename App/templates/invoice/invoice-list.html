@@ -44,7 +44,7 @@
                             <td> {{invoice.date}}</td>
                             <td> {{invoice.due_date}} </td>
                             <td width="1%"></td>
-                            <td>{{invoice.total_amount}}</td>
+                            <td>{{invoice.total_amount|default:'-'}}</td>
                             <td class="level-right">
                                 {% if invoice.get_status %}
                                 <a class="button is-small is-success" href="#">Paid</a>
