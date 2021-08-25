@@ -124,6 +124,14 @@ def view_PDF(request, id=None):
 
     return render(request, 'invoice/pdf_template.html', context)
 
+def delete_PDF(request, id=None):
+    last = request.META.get('HTTP_REFERER', None)
+
+    invoice     = get_object_or_404(Invoice, id=id)
+    invoice.delete()
+
+    return redirect(last)
+
 def generate_PDF(request, id):
     pdf 		= pdfkit.from_url(request.build_absolute_uri(reverse('invoice:invoice-detail', args=[id])), False)
     response 	= HttpResponse(pdf,content_type='application/pdf')

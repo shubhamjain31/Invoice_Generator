@@ -32,6 +32,7 @@
                                 <th>STATUS</th>
                                 <th>View</th>
                                 <th>DOWNLOAD</th>
+                                <th>DELETE</th>
 
                             </tr>
                         </thead>
@@ -56,6 +57,7 @@
                                 <div class="button is-small is-info">View</div>
                             </a></td>
                             <td width="1%"><a href="{% url 'invoice:invoice-download' id=invoice.id %}">Download</a></td>
+                            <td width="1%"><a style="color: red;" href="{% url 'invoice:invoice-delete' id=invoice.id %}">Delete</a></td>
                         </tr>
                         {% endfor %}
 

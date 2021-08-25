@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 
-from .views import InvoiceListView, createInvoice, view_PDF, generate_PDF
+from .views import InvoiceListView, createInvoice, view_PDF, generate_PDF, delete_PDF
 
 app_name = 'invoice'
 
@@ -9,5 +9,6 @@ urlpatterns = [
     path('', InvoiceListView.as_view(), name="invoice-list"),
     path('create/', createInvoice, name="invoice-create"),
     path('invoice-detail/<id>', view_PDF, name='invoice-detail'),
-    path('invoice-download/<id>', generate_PDF, name='invoice-download')
+    path('invoice-download/<id>', generate_PDF, name='invoice-download'),
+    path('invoice-delete/<id>', delete_PDF, name='invoice-delete')
 ]
